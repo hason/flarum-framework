@@ -18,10 +18,10 @@ use Flarum\Discussion\Event\Renamed;
 use Flarum\Discussion\Event\Restored;
 use Flarum\Discussion\Event\Started;
 use Flarum\Foundation\EventGeneratorTrait;
-use Flarum\Locale\LocaleManager;
 use Flarum\Notification\Notification;
 use Flarum\Post\MergeableInterface;
 use Flarum\Post\Post;
+use Flarum\Settings\SettingsRepositoryInterface;
 use Flarum\User\User;
 use Illuminate\Support\Str;
 
@@ -446,6 +446,10 @@ class Discussion extends AbstractModel
     protected function setTitleAttribute($title)
     {
         $this->attributes['title'] = $title;
-        $this->slug = Str::slug($title, '-', resolve(LocaleManager::class)->getLocale());
+        $this->slug = Str::slug(
+            $title,
+            '-',
+            resolve(SettingsRepositoryInterface::class)->get('default_locale', 'en')
+        );
     }
 }
