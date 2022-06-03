@@ -62,9 +62,14 @@ export default function () {
     const chosenSecondaryTags = chosenTags.filter(tag => tag.position() === null);
     const selectableTags = getSelectableTags();
 
-    if ((!chosenTags.length
-          || (chosenPrimaryTags.length < app.forum.attribute('minPrimaryTags'))
-          || (chosenSecondaryTags.length < app.forum.attribute('minSecondaryTags'))
+    const minPrimaryTags = parseInt(app.forum.attribute('minPrimaryTags'));
+    const minSecondaryTags = parseInt(app.forum.attribute('minSecondaryTags'));
+    const maxPrimaryTags = parseInt(app.forum.attribute('maxPrimaryTags'));
+    const maxSecondaryTags = parseInt(app.forum.attribute('maxSecondaryTags'));
+
+    if (((!chosenTags.length && maxPrimaryTags !== 0 && maxSecondaryTags !== 0)
+          || (chosenPrimaryTags.length < minPrimaryTags)
+          || (chosenSecondaryTags.length < minSecondaryTags)
         ) && selectableTags.length) {
       app.modal.show(TagDiscussionModal, {
           selectedTags: chosenTags,
